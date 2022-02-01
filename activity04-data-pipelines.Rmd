@@ -33,7 +33,9 @@ Knit your report with the `message = FALSE` R code chunk option and pay attentio
 Now, switch this option to `message = TRUE` and knit your report again.
 Discuss what is different when the `message` option is turned on (`TRUE`) and turned off (`FALSE`) for the previous code chunk.
 
-**Response**:
+**Response**: When producing the document it shows the code messages produced. For instance the `load_packages` code chunk produces a message
+showing the attached packages and any conflicts with other packages. This particular message shows conflicts with `filter` and `lag`
+functions. This is to be expected when loading `{tidyverse}` because these functions already exist in base R.
 
 
 Turn the `message` option off and continue in this activity.
@@ -82,7 +84,8 @@ You can view the entire dataset by clicking on the name of the data frame in the
 
 Explore and describe what the `message` option does in `load_data` code chunk.
 
-**Response**:
+**Response**: The `message` option in `load_data` shows the details in the assignment code line. It states the data is being seperated by
+commas and the columns and what type of data they're being saved as.
 
 
 Turn the `message` option off and continue in this activity.
@@ -162,7 +165,7 @@ Describe how you would go about answering this question using a different softwa
 You do not need to code anything.
 As you write this process, think of it as a series of steps and it might be helpful to start at the goal and work backwards.
 
-**Response**:
+**Response**: We are going to need to compare the majors by `unemployment rate`. In a program like Excel this would be done with a sort feature (low to high).
 
 
 #### Using `{dplyr}`
@@ -171,7 +174,9 @@ In the R code chunk below, name it `rearrange_college`.
 
 Take the `college_recent_grads` dataset, *then* `arrange` the dataset by `unemployment_rate`.
 
-```{r}
+```{r rearrange_college, message = FALSE}
+college_recent_grads %>%
+  arrange(unemployment_rate)
 
 ```
 
@@ -184,11 +189,13 @@ Also, notice that by default when you *arrange* by a variable, it defaults to *a
 Use the pipeline that you made in the `rearrange_college` code chunk as the start to this solution, **then** `select` only the variables `rank`, `major`, and `unemployment_rate`.
 Name this code chunk `lowest_unemploy`.
 
-```{r}
-
+```{r lowest_unemployment, message = FALSE}
+college_recent_grads %>%
+  arrange(unemployment_rate) %>%
+  select(rank, major, unemployment_rate)
 ```
 
-**Response**:
+**Response**: This is a pretty nifty tool, we can see that the top 5 results all have 0% unemployment rate! Shout out to Math and Botany :).,
 
 
 <img src="README-img/noun_pause.png" alt="pause" width = "20"/> <b>Planned Pause Point</b>: If you feel that you have a good understanding of these commands, feel free to start working on your project. The remainder of this activity will help to expand these commands.
@@ -198,13 +205,16 @@ Name this code chunk `lowest_unemploy`.
 Using the `college_recent_grads` dataset and functions from `{dplyr}`, `arrange` the dataset by `sharewomen`, and `select` only `rank`, `major`, and `sharewomen`. 
 Name your code chunk `highest_prop_women`.
 
-```{r}
+```{r highest_prop_women, message = FALSE}
+college_recent_grads %>%
+  arrange(desc(sharewomen)) %>%
+  select(rank, major, sharewomen)
 
 ```
 
 Discuss your output as it relates to the research question.
 
-**Response**:
+**Response**: By observing the data arranged in descending order of `sharewomen` we see that the major with the largest proportion of women is Early Childhood Education at nearly 97%.
 
 
 ![](README-img/noun_pause.png) **Planned Pause Point**: If you have any questions, contact your instructor. Otherwise feel free to continue on.
@@ -229,13 +239,20 @@ Using the `stem_categories` vector and knowledge that the median salary for all 
 Only display the variables `major`, `p25th`, `median`, and `p75th`
 Name the code chunk `stem_low_salaries`.
 
-```{r}
-
+```{r stem_low_salaries, message = FALSE}
+college_recent_grads %>%
+  filter(major_category %in% stem_categories,
+         median < 36000) %>%
+  select(major, 
+         p25th, 
+         median, 
+         p75th) %>%
+  arrange(median)
 ```
 
 Discuss your output as it relates to the research question.
 
-**Response**:
+**Response**: We can see that there are 10 STEM majors that are below the median salary of all majors. Lowest being Zoology.
 
 
 ![](README-img/noun_pause.png) **(Final) Planned Pause Point**: If you have any questions, contact your instructor. Otherwise feel free to continue on.
